@@ -43,6 +43,8 @@ matrix:
             - gcc-arm-linux-gnueabihf
             - libc6-armhf-cross
             - libc6-dev-armhf-cross
+            # Emulator
+            - qemu-user
     # Beta channel skipped — I don't see much point
     # Nightly channel
     # Native first
