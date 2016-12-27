@@ -1,0 +1,40 @@
+# AppVeyor configuration based on https://github.com/japaric/rust-everywhere
+#
+# We don't need binary build, only continuous integration, so we don't use
+# the deploy step. We also only build subset of the configurations to keep
+# the time down.
+
+environment:
+  matrix:
+    # Stable channel
+    - TARGET: i686-pc-windows-gnu
+      CHANNEL: stable
+    - TARGET: x86_64-pc-windows-msvc
+      CHANNEL: stable
+    # Beta channel skipped — I don't see much point
+    # Nightly channel
+    - TARGET: i686-pc-windows-gnu
+      CHANNEL: nightly
+    - TARGET: x86_64-pc-windows-msvc
+      CHANNEL: nightly
+
+# Install Rust and Cargo
+# (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
+install:
+  - curl -sSf -o rustup-init.exe https://win.rustup.rs
+  - rustup-init.exe --default-host %TARGET% --default-toolchain %CHANNEL% -y
+  - set PATH=%PATH%;C:\Users\appveyor\.cargo\bin
+  - rustc -Vv
+  - cargo -V
+
+build_script:
+  - cmd: cargo build --verbose
+
+# Equivalent to Travis' `script` phase
+# NOTE: rust-everywhere didn't have the cmd: prefix, but the appveyor
+# configurator generates it, so I set it too.
+test_script:
+  - cmd: cd locale_core & cargo test
+  - cmd: cargo test
+
+# vim: set sw=2 sts=2:

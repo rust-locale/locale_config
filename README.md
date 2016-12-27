@@ -1,4 +1,5 @@
-[![TravisCI](https://travis-ci.org/rust-locale/locale_config.svg?branch=master)](https://travis-ci.org/rust-locale/locale_config)
+[![TravisCI Build Status](https://travis-ci.org/rust-locale/locale_config.svg?branch=master)](https://travis-ci.org/rust-locale/locale_config)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/13100wtqs80tyink/branch/master?svg=true)](https://ci.appveyor.com/project/jan-hudec/locale-config/branch/master)
 
 # `locale_config`
 
