@@ -1,0 +1,19 @@
+[package]
+name = "locale_config"
+version = "0.1.0-pre"
+description = """
+Maintains locale preferences for process and thread and initialises them by
+inspecting the system for user preference.
+"""
+authors = [
+    "Jan Hudec <bulb@ucw.cz>",
+]
+homepage = "https://github.com/rust-locale/rust-locale"
+license = "MIT"
+
+[dependencies]
+lazy_static = "0.2"
+regex = "0.1"
+
+[package.metadata.release]
+upload-doc = true
