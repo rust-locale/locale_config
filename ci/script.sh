@@ -11,10 +11,10 @@ run_test_suite() {
     case $TARGET in
         # configure emulation for transparent execution of foreign binaries
         aarch64-unknown-linux-gnu)
-            export QEMU_LD_PREFIX=/usr/aarch64-linux-gnu
+            export QEMU_CMD='qemu-aarch64 -L /usr/aarch64-linux-gnu'
             ;;
         arm*-unknown-linux-gnueabihf)
-            export QEMU_LD_PREFIX=/usr/arm-linux-gnueabihf
+            export QEMU_CMD='qemu-arm -L /usr/arm-linux-gnueabihf'
             ;;
         *)
             ;;
@@ -26,8 +26,18 @@ run_test_suite() {
     fi
 
     cargo build --target $TARGET --verbose
+
+    # cargo test should™ just run if we request qemu-user-static and
+    # binfmt-support, but the test crashes. Since that requires sudo and that
+    # makes it run on even more ancient host than otherwise, we run the tests
+    # manually..
     # nothing to run in a library
-    cargo test --target $TARGET
+    if [ -n "$QEMU_CMD" ]; then
+	cargo test --target $TARGET --no-run
+	find target/$TARGET/debug -maxdepth 1 -executable -type f -exec $QEMU_CMD '{}' ';'
+    else
+	cargo test --target $TARGET
+    fi
 
     # sanity check the file type
     # TODO: non-deterministic, unfortunately: file target/$TARGET/debug/hello

@@ -36,10 +36,6 @@ matrix:
     - os: linux
       rust: stable
       env: TARGET=armv7-unknown-linux-gnueabihf
-      # Try trusty, whether it avoids the crash (that I don't see locally)
-      dist: trusty
-      # sudo is needed for binfmt_misc, which is needed for transparent user qemu emulation
-      sudo: required
       addons:
         apt:
           packages: &armv7_unknown_linux_gnueabihf
@@ -47,9 +43,6 @@ matrix:
             - gcc-arm-linux-gnueabihf
             - libc6-armhf-cross
             - libc6-dev-armhf-cross
-            # Transparent emulation
-            - qemu-user-static
-            - binfmt-support
     # Beta channel skipped — I don't see much point
     # Nightly channel
     # Native first
@@ -72,10 +65,6 @@ matrix:
     - os: linux
       rust: nightly
       env: TARGET=armv7-unknown-linux-gnueabihf
-      # Try trusty, whether it avoids the crash (that I don't see locally)
-      dist: trusty
-      # sudo is needed for binfmt_misc, which is needed for transparent user qemu emulation
-      sudo: required
       addons:
         apt:
           packages: *armv7_unknown_linux_gnueabihf
