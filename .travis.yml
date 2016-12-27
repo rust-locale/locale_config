@@ -1,0 +1,88 @@
+# TravisCI configuration based on https://github.com/japaric/rust-everywhere
+#
+# We don't need binary build, only continuous integration, so we don't use
+# the deploy step. We also only build a somewhat representative selection of
+# targets.
+
+# See: https://docs.travis-ci.com/user/migrating-from-legacy/#How-can-I-use-container-based-infrastructure%3F
+# sudo: false
+
+language: rust
+cache: cargo
+
+matrix:
+  include:
+    # Stable channel
+    # Native first
+    - os: linux
+      rust: stable
+      env: TARGET=x86_64-unknown-linux-gnu
+    - os: osx
+      rust: stable
+      env: TARGET=x86_64-apple-darwin
+    # Native, but non-standard library
+    - os: linux
+      rust: stable
+      env: TARGET=i686-unknown-linux-musl
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages: &musl_packages
+            - musl
+            - musl-dev
+            - musl-tools
+    # Cross-compiles
+    - os: linux
+      rust: stable
+      env: TARGET=armv7-unknown-linux-gnueabihf
+      # sudo is needed for binfmt_misc, which is needed for transparent user qemu emulation
+      sudo: required
+      addons:
+        apt:
+          packages: &armv7_unknown_linux_gnueabihf
+            # Cross compiler and cross compiled C libraries
+            - gcc-arm-linux-gnueabihf
+            - libc6-armhf-cross
+            - libc6-dev-armhf-cross
+            # Transparent emulation
+            - qemu-user-static
+            - binfmt-support
+    # Beta channel skipped — I don't see much point
+    # Nightly channel
+    # Native first
+    - os: linux
+      rust: nightly
+      env: TARGET=x86_64-unknown-linux-gnu
+    - os: osx
+      rust: nightly
+      env: TARGET=x86_64-apple-darwin
+    # Native, but non-standard library
+    - os: linux
+      rust: nightly
+      env: TARGET=i686-unknown-linux-musl
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          packages: *musl_packages
+    # Cross-compiles
+    - os: linux
+      rust: nightly
+      env: TARGET=armv7-unknown-linux-gnueabihf
+      # sudo is needed for binfmt_misc, which is needed for transparent user qemu emulation
+      sudo: required
+      addons:
+        apt:
+          packages: *armv7_unknown_linux_gnueabihf
+
+before_install:
+    - export PATH="$PATH:$HOME/.cargo/bin"
+
+install:
+    - bash ci/install.sh
+
+script:
+    - bash ci/script.sh
+
+# vim: set sw=2 sts=2:
