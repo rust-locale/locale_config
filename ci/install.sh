@@ -4,18 +4,6 @@ set -ex
 
 . $(dirname $0)/utils.sh
 
-install_c_toolchain() {
-    case $TARGET in
-        aarch64-unknown-linux-gnu)
-            sudo apt-get install -y --no-install-recommends \
-                 gcc-aarch64-linux-gnu libc6-arm64-cross libc6-dev-arm64-cross
-            ;;
-        *)
-            # For other targets, this is handled by addons.apt.packages in .travis.yml
-            ;;
-    esac
-}
-
 install_rustup() {
     # uninstall the rust toolchain installed by travis, we are going to use rustup
     sh ~/rust/lib/rustlib/uninstall.sh
@@ -49,7 +37,6 @@ EOF
 }
 
 main() {
-    install_c_toolchain
     install_rustup
     install_standard_crates
     configure_cargo
