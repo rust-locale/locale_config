@@ -399,12 +399,10 @@ pub struct Locale {
 }
 
 lazy_static! {
-    static ref LOCALE_ELEMENT_REGEX: Regex = Regex::new(r"(?ix)
-        ^
-        (?:(?P<category>[:alpha:]{1,20})=)?
-        (?P<tag>(?:[:alnum:]|-)+)
-        $
-        ").unwrap();
+    static ref LOCALE_ELEMENT_REGEX: Regex = Regex::new(r"(?ix) ^
+        (?: (?P<category> [:alpha:]{1,20} ) = )?
+        (?P<tag> (?: [:alnum:] | - | \* )+ )
+    $ ").unwrap();
 }
 
 impl Locale {
