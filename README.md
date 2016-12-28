@@ -51,4 +51,4 @@ In case you need to access the initial value, you'll find it under
 Locale::user_default()
 ```
 
-See [full documentation](http://rust-locale.github.io/locale_config).
+See [full documentation](https://rust-locale.github.io/locale_config/locale_config/).

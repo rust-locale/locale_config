@@ -8,7 +8,8 @@ inspecting the system for user preference.
 authors = [
     "Jan Hudec <bulb@ucw.cz>",
 ]
-homepage = "https://github.com/rust-locale/rust-locale"
+documentation = "https://rust-locale.github.io/locale_config/locale_config/"
+repository = "https://github.com/rust-locale/locale_config/"
 license = "MIT"
 
 [dependencies]
