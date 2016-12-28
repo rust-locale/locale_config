@@ -738,13 +738,14 @@ mod test {
     fn locale_simple() {
         assert_eq!("en-US", Locale::new("en-US").unwrap().as_ref());
         assert_eq!("zh-Hant", Locale::new("zh-hant").unwrap().as_ref());
+        assert_eq!("de-*", Locale::new("de-*").unwrap().as_ref());
         assert!(Locale::new("invalid!").is_err());
         assert!(Locale::new("hı-İN").is_err());
     }
 
     #[test]
     fn locale_list() {
-        assert_eq!("cs-CZ,en-GB,en", Locale::new("cs-cz,en-gb,en").unwrap().as_ref());
+        assert_eq!("cs-CZ,en-GB,en,*", Locale::new("cs-cz,en-gb,en,*").unwrap().as_ref());
         assert_eq!("cs-CZ,engrish", Locale::new("cs-cz,engrish").unwrap().as_ref());
         assert!(Locale::new("cs-cz,hı-İN").is_err());
     }
