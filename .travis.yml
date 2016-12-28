@@ -51,6 +51,7 @@ matrix:
     - os: linux
       rust: stable
       env: TARGET=aarch64-unknown-linux-gnu
+      dist: trusty
       addons:
         apt:
           sources:
@@ -92,6 +93,7 @@ matrix:
     - os: linux
       rust: stable
       env: TARGET=aarch64-unknown-linux-gnu
+      dist: trusty
       addons:
         apt:
           sources:
