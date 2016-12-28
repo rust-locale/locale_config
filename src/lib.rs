@@ -641,13 +641,25 @@ impl<'a, 'c> Iterator for TagsFor<'a, 'c> {
 // on first access!
 lazy_static! {
     // TODO: Implement the constructor
-    static ref USER_LOCALE: Locale = Locale::invariant(); // FIXME TODO: unix::system_locale();
+    static ref USER_LOCALE: Locale = system_locale();
     static ref GLOBAL_LOCALE: Mutex<Locale> = Mutex::new(Locale::user_default());
 }
 
 thread_local!(
     static CURRENT_LOCALE: RefCell<Locale> = RefCell::new(Locale::global_default())
 );
+
+static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
+];
+
+fn system_locale() -> Locale {
+    for f in INITIALISERS {
+        if let Some(l) = f() {
+            return l;
+        }
+    }
+    return Locale::invariant();
+}
 
 // --------------------------------- TESTS -------------------------------------
 
