@@ -770,6 +770,10 @@ mod test {
         assert_eq!("ssy-ER", LanguageRange::from_unix("aa_ER@saaho").unwrap().as_ref());
         assert!(LanguageRange::from_unix("foo_BAR").is_err());
         assert!(LanguageRange::from_unix("en@arabic.UTF-8").is_err());
+        assert_eq!("", LanguageRange::from_unix("C").unwrap().as_ref());
+        assert_eq!("", LanguageRange::from_unix("C.UTF-8").unwrap().as_ref());
+        assert_eq!("", LanguageRange::from_unix("C.ISO-8859-1").unwrap().as_ref());
+        assert_eq!("", LanguageRange::from_unix("POSIX").unwrap().as_ref());
     }
 
     #[test]
