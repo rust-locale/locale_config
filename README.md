@@ -20,3 +20,35 @@ important that incompatible version requirements don't cause multiple
 versions to be pulled in the final binary, so I do recommend it here and
 promise I will maintain good compatibility. Just please don't add traits to
 the types defined here to avoid conflicts with potential future methods.
+
+## Using
+
+Usually you want to use this indirectly via a localization crate like
+`locale`. However if you need to work with the identifier itself, or you need
+to override it, use
+
+```rust
+Locale::current()
+```
+
+to find what you should be using at any given point in the application,
+
+```rust
+Locale::set_current()
+```
+
+to override it for current thread and
+
+```rust
+Locale::set_global_default()
+```
+
+to override it for new threads.
+
+In case you need to access the initial value, you'll find it under
+
+```rust
+Locale::user_default()
+```
+
+See [full documentation](http://rust-locale.github.io/locale_config).
