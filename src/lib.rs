@@ -379,7 +379,7 @@ impl<'a> fmt::Display for LanguageRange<'a> {
 /// these are provided in the user default `Locale` and other libraries can use them.
 ///
 /// `Locale` is represented by a `,`-separated sequence of tags in `LanguageRange` syntax, where
-/// all except the first one may be preceeded by category name and `=` sign.
+/// all except the first one may be preceded by category name and `=` sign.
 ///
 /// The first tag indicates the default locale, the tags prefixed by category names indicate
 /// _overrides_ for those categories and the remaining tags indicate fallbacks.
@@ -441,7 +441,7 @@ impl Locale {
     /// Construct locale from the string representation.
     ///
     /// `Locale` is represented by a `,`-separated sequence of tags in `LanguageRange` syntax, where
-    /// all except the first one may be preceeded by category name and `=` sign.
+    /// all except the first one may be preceded by category name and `=` sign.
     ///
     /// The first tag indicates the default locale, the tags prefixed by category names indicate
     /// _overrides_ for those categories and the remaining tags indicate fallbacks.
