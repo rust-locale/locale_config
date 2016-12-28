@@ -118,14 +118,16 @@ lazy_static! {
         (?: [:alpha:]{1,8} | \* )
         (?: - (?: [:alnum:]{1,8} | \* ))*
     $ ").unwrap();
-    static ref UNIX_TAG_REGEX: Regex = Regex::new(r"(?ix)
-        ^
-        (?P<language>[:alpha:]{2,3})
-        (_(?P<region>([:alpha:]{2}|[:digit:]{3})))?
-        (\.(?P<encoding>[0-9a-zA-Z-]{1,20}))?
-        (@(?P<variant>[:alnum:]{1,20}))?
-        $
-        ").unwrap();
+    static ref UNIX_INVARIANT_REGEX: Regex = Regex::new(r"(?ix) ^
+        (?: c | posix )
+        (?: \. (?: [0-9a-zA-Z-]{1,20} ))?
+    $ ").unwrap();
+    static ref UNIX_TAG_REGEX: Regex = Regex::new(r"(?ix) ^
+        (?P<language> [:alpha:]{2,3} )
+        (?: _  (?P<region> [:alpha:]{2} | [:digit:]{3} ))?
+        (?: \. (?P<encoding> [0-9a-zA-Z-]{1,20} ))?
+        (?: @  (?P<variant> [:alnum:]{1,20} ))?
+    $ ").unwrap();
 }
 
 fn is_owned<'a, T: ToOwned + ?Sized>(c: &Cow<'a, T>) -> bool {
@@ -340,6 +342,8 @@ impl<'a> LanguageRange<'a> {
             return Ok(LanguageRange {
                 language: Cow::Owned(res)
             });
+        } else if UNIX_INVARIANT_REGEX.is_match(s) {
+            return Ok(LanguageRange::invariant())
         } else {
             return Err(NOT_WELL_FORMED);
         }
