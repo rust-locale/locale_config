@@ -647,11 +647,16 @@ thread_local!(
     static CURRENT_LOCALE: RefCell<Locale> = RefCell::new(Locale::global_default())
 );
 
+// NOTE: Cgi-style environment variable HTTP_ACCEPT_LANGUAGE is unlikely to be defined at any other
+// time than when actually executing in CGI, so we can relatively safely always interpret it.
+mod cgi;
+
 // NOTE: Unix-style environment variables are actually inspected everywhere, because many users
 // have them, because some software only uses those even on Windows and other systems.
 mod unix;
 
 static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
+    cgi::system_locale,
     unix::system_locale,
 ];
 
