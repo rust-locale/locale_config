@@ -649,7 +649,12 @@ thread_local!(
     static CURRENT_LOCALE: RefCell<Locale> = RefCell::new(Locale::global_default())
 );
 
+// NOTE: Unix-style environment variables are actually inspected everywhere, because many users
+// have them, because some software only uses those even on Windows and other systems.
+mod unix;
+
 static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
+    unix::system_locale,
 ];
 
 fn system_locale() -> Locale {
