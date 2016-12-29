@@ -16,5 +16,9 @@ license = "MIT"
 lazy_static = "0.2"
 regex = "0.1"
 
+[target.'cfg(windows)'.dependencies]
+winapi = "0.2.8"
+kernel32-sys = "0.2.2"
+
 [package.metadata.release]
 upload-doc = true
