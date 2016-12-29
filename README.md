@@ -1,5 +1,6 @@
 [![TravisCI Build Status](https://travis-ci.org/rust-locale/locale_config.svg?branch=master)](https://travis-ci.org/rust-locale/locale_config)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/13100wtqs80tyink/branch/master?svg=true)](https://ci.appveyor.com/project/jan-hudec/locale-config/branch/master)
+[![Crates.io Version](https://img.shields.io/crates/v/locale_config.svg)](https://crates.io/crates/locale_config)
 
 # `locale_config`
 
