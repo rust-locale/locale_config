@@ -53,3 +53,34 @@ Locale::user_default()
 ```
 
 See [full documentation](https://rust-locale.github.io/locale_config/locale_config/).
+
+## Supported systems
+
+* **Unix:** Using the POSIX standard environment variables `LANG`, `LC_*` and
+  `LANGUAGES`. The variables are recognized on all systems and take
+  precedence on most of them.
+
+* **Windows:** Vista and newer
+
+    - Uses API available from Vista and Server 2008 only.
+    - The `GetUserPreferredUILanguages` is only available for desktop, but
+      not store applications. Store applications should have equivalent
+      functionality, but I didn't try accessing it from Rust yet.
+    - Customization to individual locale elements done in “Regional and
+      Language options” (digits, calendar, decimal and thousand separator
+      etc.) are not detected (yet).
+    - Not well tested.
+
+* **CGI:** The `HTTP_ACCEPT_LANGUAGE` environment variable is used if
+  detected. Hopefully it is specific enough to the CGI environment that it
+  can be used whenever detected.
+
+## Changelog
+
+### 0.1.1
+
+* Added basic Windows support.
+
+### 0.1.0
+
+* Initial version, with Unix and CGI support.
