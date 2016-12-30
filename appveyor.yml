@@ -36,5 +36,6 @@ build_script:
 test_script:
   - cmd: cd locale_core & cargo test
   - cmd: cargo test
+  - cmd: cargo run --example show-user-locale
 
 # vim: set sw=2 sts=2:

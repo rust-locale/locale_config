@@ -40,8 +40,10 @@ run_test_suite() {
 	for TEST in $TESTS; do
 	    $TEST_CMD $TEST
 	done
+	$TEST_CMD target/$TARGET/debug/examples/show-user-locale
     else
 	cargo test --target $TARGET
+	cargo run --target $TARGET --example show-user-locale
     fi
 
     # sanity check the file type
