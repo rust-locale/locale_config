@@ -1,6 +1,6 @@
 [package]
 name = "locale_config"
-version = "0.1.1-pre"
+version = "0.1.1"
 description = """
 Maintains locale preferences for process and thread and initialises them by
 inspecting the system for user preference.
