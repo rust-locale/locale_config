@@ -3,13 +3,85 @@ extern crate kernel32;
 
 use super::{LanguageRange,Locale};
 
+use std::fmt::Write;
+
+const LOCALE_SDECIMAL: winapi::c_ulong = 0x000E;
+const LOCALE_STHOUSAND: winapi::c_ulong = 0x000F;
+const LOCALE_SNATIVEDIGITS: winapi::c_ulong = 0x0013;
+
 fn get_user_default_locale() -> Result<LanguageRange<'static>, &'static str> {
     let mut buf = [0u16; 85];
     let len = unsafe {
         kernel32::GetUserDefaultLocaleName(buf.as_mut_ptr(), buf.len() as i32)
     };
     if len > 0 {
-        let s = String::from_utf16_lossy(&buf[..(len as usize - 1)]);
+        let mut s = String::from_utf16_lossy(&buf[..(len as usize - 1)]);
+        let mut u_ext = String::new();
+        let mut x_ext = String::new();
+        if_locale_info_differs(LOCALE_SDECIMAL, |s| {
+            x_ext.push_str("-ds");
+            for c in s.chars() {
+                write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+            }
+        });
+        if_locale_info_differs(LOCALE_STHOUSAND, |s| {
+            x_ext.push_str("-gs");
+            for c in s.chars() {
+                write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+            }
+        });
+        if_locale_info_differs(LOCALE_SNATIVEDIGITS, |s| {
+            u_ext.push_str(match s.as_ref() {
+                // basic plane numeric numberingSystems from CLDR
+                "٠١٢٣٤٥٦٧٨٩" => "-nu-arab",
+                "۰۱۲۳۴۵۶۷۸۹" => "-nu-arabext",
+                "᭐᭑᭒᭓᭔᭕᭖᭗᭘᭙" => "-nu-bali",
+                "০১২৩৪৫৬৭৮৯" => "-nu-beng",
+                "꩐꩑꩒꩓꩔꩕꩖꩗꩘꩙" => "-nu-cham",
+                "०१२३४५६७८९" => "-nu-deva",
+                "０１２３４５６７８９" => "-nu-fullwide",
+                "૦૧૨૩૪૫૬૭૮૯" => "-nu-gujr",
+                "੦੧੨੩੪੫੬੭੮੯" => "-nu-guru",
+                "〇一二三四五六七八九" => "-nu-hanidec",
+                "꧐꧑꧒꧓꧔꧕꧖꧗꧘꧙" => "-nu-java",
+                "꤀꤁꤂꤃꤄꤅꤆꤇꤈꤉" => "-nu-kali",
+                "០១២៣៤៥៦៧៨៩" => "-nu-khmr",
+                "೦೧೨೩೪೫೬೭೮೯" => "-nu-knda",
+                "᪀᪁᪂᪃᪄᪅᪆᪇᪈᪉" => "-nu-lana",
+                "᪐᪑᪒᪓᪔᪕᪖᪗᪘᪙" => "-nu-lanatham",
+                "໐໑໒໓໔໕໖໗໘໙" => "-nu-laoo",
+                "0123456789" => "-nu-latn",
+                "᱀᱁᱂᱃᱄᱅᱆᱇᱈᱉" => "-nu-lepc",
+                "᥆᥇᥈᥉᥊᥋᥌᥍᥎᥏" => "-nu-limb",
+                "൦൧൨൩൪൫൬൭൮൯" => "-nu-mlym",
+                "᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙" => "-nu-mong",
+                "꯰꯱꯲꯳꯴꯵꯶꯷꯸꯹" => "-nu-mtei",
+                "၀၁၂၃၄၅၆၇၈၉" => "-nu-mymr",
+                "႐႑႒႓႔႕႖႗႘႙" => "-nu-mymrshan",
+                "߀߁߂߃߄߅߆߇߈߉" => "-nu-nkoo",
+                "᱐᱑᱒᱓᱔᱕᱖᱗᱘᱙" => "-nu-olck",
+                "୦୧୨୩୪୫୬୭୮୯" => "-nu-orya",
+                "꣐꣑꣒꣓꣔꣕꣖꣗꣘꣙" => "-nu-saur",
+                "᮰᮱᮲᮳᮴᮵᮶᮷᮸᮹" => "-nu-sund",
+                "᧐᧑᧒᧓᧔᧕᧖᧗᧘᧙" => "-nu-talu",
+                "௦௧௨௩௪௫௬௭௮௯" => "-nu-tamldec",
+                "౦౧౨౩౪౫౬౭౮౯" => "-nu-telu",
+                "๐๑๒๓๔๕๖๗๘๙" => "-nu-thai",
+                "༠༡༢༣༤༥༦༧༨༩" => "-nu-tibt",
+                "꘠꘡꘢꘣꘤꘥꘦꘧꘨꘩" => "-nu-vaii",
+                // I don't think Windows can configure anything else, but just in case
+                _ => "",
+            })
+        });
+        // TODO: Other items configurable in Country & Language control panel.
+        if !u_ext.is_empty() {
+            s.push_str("-u");
+            s.push_str(&*u_ext);
+        }
+        if !x_ext.is_empty() {
+            s.push_str("-x");
+            s.push_str(&*x_ext);
+        }
         return LanguageRange::new(&*s).map(|x| x.into_static());
     }
     // TODO: Fall back to GetUserDefaultLCID and/or GetLocaleInfoW
@@ -50,6 +122,26 @@ fn get_user_preferred_languages() -> Vec<LanguageRange<'static>> {
             .collect();
     }
     return Vec::new();
+}
+
+fn if_locale_info_differs<F: FnOnce(&str)>(lc_type: winapi::c_ulong, func: F) {
+    #[allow(non_snake_case)] // would be const if it wasn't for the fact const functions are still unstable
+    let LOCALE_NAME_USER_DEFAULT: *mut u16 = ::std::ptr::null_mut();
+    const LOCALE_NOUSEROVERRIDE: winapi::c_ulong = 0x80000000;
+    let mut buf_user = [0u16; 86];
+    let mut buf_def = [0u16; 86];
+    let len_user = unsafe {
+        kernel32::GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, lc_type,
+                                  buf_user.as_mut_ptr(), buf_user.len() as winapi::c_long)
+    };
+    let len_def = unsafe {
+        kernel32::GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, lc_type | LOCALE_NOUSEROVERRIDE,
+                                  buf_def.as_mut_ptr(), buf_user.len() as winapi::c_long)
+    };
+    if buf_user[0..(len_user as usize - 1)] != buf_def[0..(len_def as usize - 1)] {
+        let s = &*String::from_utf16_lossy(&buf_user[0..(len_user as usize - 1)]);
+        func(&*s);
+    }
 }
 
 // User default language is the primary language. If user preferred UI languages returns anything, the
