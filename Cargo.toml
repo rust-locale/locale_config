@@ -8,9 +8,12 @@ inspecting the system for user preference.
 authors = [
     "Jan Hudec <bulb@ucw.cz>",
 ]
-documentation = "https://rust-locale.github.io/locale_config/locale_config/"
-repository = "https://github.com/rust-locale/locale_config/"
 license = "MIT"
+
+documentation = "https://docs.rs/locale_config/"
+repository = "https://github.com/rust-locale/locale_config/"
+readme = "README.md"
+keywords = ["i18n"]
 
 [dependencies]
 lazy_static = "0.2"
