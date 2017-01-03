@@ -3,7 +3,7 @@
 use std::env;
 use super::{LanguageRange,Locale};
 
-fn tag(s: &str) -> Result<LanguageRange, &'static str> {
+fn tag(s: &str) -> super::Result<LanguageRange> {
     LanguageRange::from_unix(s).or_else(|_| LanguageRange::new(s))
 }
 

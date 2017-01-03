@@ -78,6 +78,10 @@ See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](
 
 ## Changelog
 
+### 0.2.0
+
+* Changed error handling to proper error type.
+
 ### 0.1.1
 
 * Added basic Windows support.

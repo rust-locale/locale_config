@@ -103,8 +103,6 @@ pub struct LanguageRange<'a> {
     language: Cow<'a, str>
 }
 
-const NOT_WELL_FORMED: &'static str = "Language tag is not well-formed.";
-
 lazy_static! {
     static ref REGULAR_LANGUAGE_RANGE_REGEX: Regex = Regex::new(r"(?x) ^
         (?P<language> (?:
@@ -191,7 +189,7 @@ impl<'a> LanguageRange<'a> {
     ///
     /// [RFC5646]: https://www.rfc-editor.org/rfc/rfc5646.txt
     /// [RFC4647]: https://www.rfc-editor.org/rfc/rfc4647.txt
-    pub fn new(lt: &'a str) -> Result<LanguageRange, &'static str> {
+    pub fn new(lt: &'a str) -> Result<LanguageRange> {
         if lt == "" {
             return Ok(LanguageRange {
                 language: Cow::Borrowed(lt),
@@ -223,7 +221,7 @@ impl<'a> LanguageRange<'a> {
                 language: canon_lower(Some(lt)),
             });
         } else {
-            return Err(NOT_WELL_FORMED);
+            return Err(Error::NotWellFormed);
         }
     }
 
@@ -261,7 +259,7 @@ impl<'a> LanguageRange<'a> {
     ///
     /// Note: This function is public here for benefit of applications that may come across this
     /// kind of tags from other sources than system configuration.
-    pub fn from_unix(s: &str) -> Result<LanguageRange<'static>, &'static str> {
+    pub fn from_unix(s: &str) -> Result<LanguageRange<'static>> {
         if let Some(caps) = UNIX_TAG_REGEX.captures(s) {
             let src_variant = caps.name("variant").unwrap_or("").to_ascii_lowercase();
             let mut res = caps.name("language").unwrap().to_ascii_lowercase();
@@ -345,7 +343,7 @@ impl<'a> LanguageRange<'a> {
         } else if UNIX_INVARIANT_REGEX.is_match(s) {
             return Ok(LanguageRange::invariant())
         } else {
-            return Err(NOT_WELL_FORMED);
+            return Err(Error::NotWellFormed);
         }
     }
 }
@@ -447,7 +445,7 @@ impl Locale {
     ///
     /// The first tag indicates the default locale, the tags prefixed by category names indicate
     /// _overrides_ for those categories and the remaining tags indicate fallbacks.
-    pub fn new(s: &str) -> Result<Locale, &'static str> {
+    pub fn new(s: &str) -> Result<Locale> {
         let mut i = s.split(',');
         let mut res = Locale::from(
             try!(LanguageRange::new(
@@ -455,13 +453,13 @@ impl Locale {
         for t in i {
             if let Some(caps) = LOCALE_ELEMENT_REGEX.captures(t) {
                 let tag = try!(LanguageRange::new(
-                        try!(caps.name("tag").ok_or(NOT_WELL_FORMED))));
+                        try!(caps.name("tag").ok_or(Error::NotWellFormed))));
                 match caps.name("category") {
                     Some(cat) => res.add_category(cat.to_ascii_lowercase().as_ref(), &tag),
                     None => res.add(&tag),
                 }
             } else {
-                return Err(NOT_WELL_FORMED);
+                return Err(Error::NotWellFormed);
             }
         }
         return Ok(res);
@@ -633,6 +631,8 @@ impl<'a, 'c> Iterator for TagsFor<'a, 'c> {
     }
 }
 
+// ------------------------------- INSTANCES -----------------------------------
+
 // TODO: We only need this until either std::sync::StaticMutex or std::sync::Mutex becomes usable
 // with normal `static`.
 // FIX-THE-TODO: Do we? A mutex might be usable, but we still need to initialize the value inside
@@ -677,6 +677,43 @@ fn system_locale() -> Locale {
     }
     return Locale::invariant();
 }
+
+// --------------------------------- ERRORS ------------------------------------
+
+/// Errors that may be returned by `locale_config`.
+#[derive(Copy,Clone,Debug,PartialEq,Eq)]
+pub enum Error {
+    /// Provided definition was not well formed.
+    ///
+    /// This is returned when provided configuration string does not match even the rather loose
+    /// definition for language range from [RFC4647] or the composition format used by `Locale`.
+    ///
+    /// [RFC4647]: https://www.rfc-editor.org/rfc/rfc4647.txt
+    NotWellFormed,
+    /// Placeholder for adding more errors in future. **Do not match!**.
+    __NonExhaustive,
+}
+
+impl ::std::fmt::Display for Error {
+    fn fmt(&self, out: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        use ::std::error::Error;
+        out.write_str(self.description())
+    }
+}
+
+impl ::std::error::Error for Error {
+    fn description(&self) -> &str {
+        match self {
+            &Error::NotWellFormed => "Language tag is not well-formed.",
+            // this is exception: here we do want exhaustive match so we don't publish version with
+            // missing descriptions by mistake.
+            &Error::__NonExhaustive => panic!("Placeholder error must not be instantiated!"),
+        }
+    }
+}
+
+/// Convenience Result alias.
+type Result<T> = ::std::result::Result<T, Error>;
 
 // --------------------------------- TESTS -------------------------------------
 

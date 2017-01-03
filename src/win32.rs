@@ -9,7 +9,7 @@ const LOCALE_SDECIMAL: winapi::c_ulong = 0x000E;
 const LOCALE_STHOUSAND: winapi::c_ulong = 0x000F;
 const LOCALE_SNATIVEDIGITS: winapi::c_ulong = 0x0013;
 
-fn get_user_default_locale() -> Result<LanguageRange<'static>, &'static str> {
+fn get_user_default_locale() -> super::Result<LanguageRange<'static>> {
     let mut buf = [0u16; 85];
     let len = unsafe {
         kernel32::GetUserDefaultLocaleName(buf.as_mut_ptr(), buf.len() as i32)
@@ -87,10 +87,10 @@ fn get_user_default_locale() -> Result<LanguageRange<'static>, &'static str> {
     // TODO: Fall back to GetUserDefaultLCID and/or GetLocaleInfoW
     // GetLocaleInfo(Ex) with LOCALE_SISO639LANGNAME and LOCALE_SISO3166CTRYNAME might be of some
     // utility too
-    return Err("Could not detect locale");
+    return Err(super::Error::NotWellFormed);
 }
 
-fn get_system_default_locale() -> Result<LanguageRange<'static>, &'static str> {
+fn get_system_default_locale() -> super::Result<LanguageRange<'static>> {
     let mut buf = [0u16; 85];
     let len = unsafe {
         kernel32::GetSystemDefaultLocaleName(buf.as_mut_ptr(), buf.len() as i32)
@@ -102,7 +102,7 @@ fn get_system_default_locale() -> Result<LanguageRange<'static>, &'static str> {
     // TODO: Fall back to GetUserDefaultLCID and/or GetLocaleInfoW
     // GetLocaleInfo(Ex) with LOCALE_SISO639LANGNAME and LOCALE_SISO3166CTRYNAME might be of some
     // utility too
-    return Err("Could not detect locale");
+    return Err(super::Error::NotWellFormed);
 }
 
 const MUI_LANGUAGE_NAME: winapi::c_ulong = 0x8; // from winnls.h
