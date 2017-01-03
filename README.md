@@ -53,6 +53,22 @@ In case you need to access the initial value, you'll find it under
 Locale::user_default()
 ```
 
+The value may contain language tags specific for various localization
+aspects, called categories, and fallbacks. The `Locale::tags_for` method will
+take care of selecting relevant tags for you. For preferred language of
+translations, use
+
+```rust
+Locale::current().tags_for("messages")
+```
+
+For formatting, use categories `"numeric"` for numbers, `"time"` for date and
+time and `"monetary"` for money amounts. And use `"collate"` for collation.
+
+Note that this crate does not itself provide any translation, formatting nor
+collation functionality. Formatting and collation will be provided by
+`locale` crate, translation has multiple available implementations.
+
 See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](https://docs.rs/locale_config/) or [github](https://rust-locale.github.io/locale_config/locale_config/).
 
 ## Supported systems
@@ -77,6 +93,14 @@ See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](
   can be used whenever detected.
 
 ## Changelog
+
+### 0.2.1
+
+* Interpret some overrides that can be set on Windows in Region and Language
+  dialog, namely: group, decimal and list separators, first day of week,
+  12/24-hour time, measurement system, (decimal) number system, to an extent
+  negative monetary value format (only whether to use parenthesized format
+  or not) and to an extent date format (if ISO-8601 variant is selected).
 
 ### 0.2.0
 

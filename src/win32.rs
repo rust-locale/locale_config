@@ -25,156 +25,162 @@ fn if_locale_info_differs<F: FnOnce(&str)>(lc_type: winapi::c_ulong, func: F) {
     }
 }
 
-// Locale information types from winnls.h
-const LOCALE_ILANGUAGE: winapi::c_ulong =              0x0001;
-const LOCALE_SLANGUAGE: winapi::c_ulong =              0x0002;
-const LOCALE_SENGLANGUAGE: winapi::c_ulong =           0x1001;
-const LOCALE_SENGLISHLANGUAGENAME: winapi::c_ulong =   0x1001;
-const LOCALE_SABBREVLANGNAME: winapi::c_ulong =        0x0003;
-const LOCALE_SNATIVELANGNAME: winapi::c_ulong =        0x0004;
-const LOCALE_SNATIVELANGUAGENAME: winapi::c_ulong =    0x0004;
-const LOCALE_ICOUNTRY: winapi::c_ulong =               0x0005;
-const LOCALE_SCOUNTRY: winapi::c_ulong =               0x0006;
-const LOCALE_SLOCALIZEDCOUNTRYNAME: winapi::c_ulong =  0x0006;
-const LOCALE_SENGCOUNTRY: winapi::c_ulong =            0x1002;
-const LOCALE_SENGLISHCOUNTRYNAME: winapi::c_ulong =    0x1002;
-const LOCALE_SABBREVCTRYNAME: winapi::c_ulong =        0x0007;
-const LOCALE_SNATIVECTRYNAME: winapi::c_ulong =        0x0008;
-const LOCALE_SNATIVECOUNTRYNAME: winapi::c_ulong =     0x0008;
-const LOCALE_IDEFAULTLANGUAGE: winapi::c_ulong =       0x0009;
-const LOCALE_IDEFAULTCOUNTRY: winapi::c_ulong =        0x000A;
-const LOCALE_IDEFAULTCODEPAGE: winapi::c_ulong =       0x000B;
-const LOCALE_IDEFAULTANSICODEPAGE: winapi::c_ulong =   0x1004;
-const LOCALE_IDEFAULTMACCODEPAGE: winapi::c_ulong =    0x1011;
-const LOCALE_SLIST: winapi::c_ulong =                  0x000C;
-const LOCALE_IMEASURE: winapi::c_ulong =               0x000D;
-const LOCALE_SDECIMAL: winapi::c_ulong =               0x000E;
-const LOCALE_STHOUSAND: winapi::c_ulong =              0x000F;
-const LOCALE_SGROUPING: winapi::c_ulong =              0x0010;
-const LOCALE_IDIGITS: winapi::c_ulong =                0x0011;
-const LOCALE_ILZERO: winapi::c_ulong =                 0x0012;
-const LOCALE_INEGNUMBER: winapi::c_ulong =             0x1010;
-const LOCALE_SNATIVEDIGITS: winapi::c_ulong =          0x0013;
-const LOCALE_SCURRENCY: winapi::c_ulong =              0x0014;
-const LOCALE_SINTLSYMBOL: winapi::c_ulong =            0x0015;
-const LOCALE_SMONDECIMALSEP: winapi::c_ulong =         0x0016;
-const LOCALE_SMONTHOUSANDSEP: winapi::c_ulong =        0x0017;
-const LOCALE_SMONGROUPING: winapi::c_ulong =           0x0018;
-const LOCALE_ICURRDIGITS: winapi::c_ulong =            0x0019;
-const LOCALE_IINTLCURRDIGITS: winapi::c_ulong =        0x001A;
-const LOCALE_ICURRENCY: winapi::c_ulong =              0x001B;
-const LOCALE_INEGCURR: winapi::c_ulong =               0x001C;
-const LOCALE_SDATE: winapi::c_ulong =                  0x001D;
-const LOCALE_STIME: winapi::c_ulong =                  0x001E;
-const LOCALE_SSHORTDATE: winapi::c_ulong =             0x001F;
-const LOCALE_SLONGDATE: winapi::c_ulong =              0x0020;
-const LOCALE_STIMEFORMAT: winapi::c_ulong =            0x1003;
-const LOCALE_IDATE: winapi::c_ulong =                  0x0021;
-const LOCALE_ILDATE: winapi::c_ulong =                 0x0022;
-const LOCALE_ITIME: winapi::c_ulong =                  0x0023;
-const LOCALE_ITIMEMARKPOSN: winapi::c_ulong =          0x1005;
-const LOCALE_ICENTURY: winapi::c_ulong =               0x0024;
-const LOCALE_ITLZERO: winapi::c_ulong =                0x0025;
-const LOCALE_IDAYLZERO: winapi::c_ulong =              0x0026;
-const LOCALE_IMONLZERO: winapi::c_ulong =              0x0027;
-const LOCALE_S1159: winapi::c_ulong =                  0x0028;
-const LOCALE_S2359: winapi::c_ulong =                  0x0029;
-const LOCALE_ICALENDARTYPE: winapi::c_ulong =          0x1009;
-const LOCALE_IOPTIONALCALENDAR: winapi::c_ulong =      0x100B;
-const LOCALE_IFIRSTDAYOFWEEK: winapi::c_ulong =        0x100C;
-const LOCALE_IFIRSTWEEKOFYEAR: winapi::c_ulong =       0x100D;
-const LOCALE_SDAYNAME1: winapi::c_ulong =              0x002A;
-const LOCALE_SDAYNAME2: winapi::c_ulong =              0x002B;
-const LOCALE_SDAYNAME3: winapi::c_ulong =              0x002C;
-const LOCALE_SDAYNAME4: winapi::c_ulong =              0x002D;
-const LOCALE_SDAYNAME5: winapi::c_ulong =              0x002E;
-const LOCALE_SDAYNAME6: winapi::c_ulong =              0x002F;
-const LOCALE_SDAYNAME7: winapi::c_ulong =              0x0030;
-const LOCALE_SABBREVDAYNAME1: winapi::c_ulong =        0x0031;
-const LOCALE_SABBREVDAYNAME2: winapi::c_ulong =        0x0032;
-const LOCALE_SABBREVDAYNAME3: winapi::c_ulong =        0x0033;
-const LOCALE_SABBREVDAYNAME4: winapi::c_ulong =        0x0034;
-const LOCALE_SABBREVDAYNAME5: winapi::c_ulong =        0x0035;
-const LOCALE_SABBREVDAYNAME6: winapi::c_ulong =        0x0036;
-const LOCALE_SABBREVDAYNAME7: winapi::c_ulong =        0x0037;
-const LOCALE_SMONTHNAME1: winapi::c_ulong =            0x0038;
-const LOCALE_SMONTHNAME2: winapi::c_ulong =            0x0039;
-const LOCALE_SMONTHNAME3: winapi::c_ulong =            0x003A;
-const LOCALE_SMONTHNAME4: winapi::c_ulong =            0x003B;
-const LOCALE_SMONTHNAME5: winapi::c_ulong =            0x003C;
-const LOCALE_SMONTHNAME6: winapi::c_ulong =            0x003D;
-const LOCALE_SMONTHNAME7: winapi::c_ulong =            0x003E;
-const LOCALE_SMONTHNAME8: winapi::c_ulong =            0x003F;
-const LOCALE_SMONTHNAME9: winapi::c_ulong =            0x0040;
-const LOCALE_SMONTHNAME10: winapi::c_ulong =           0x0041;
-const LOCALE_SMONTHNAME11: winapi::c_ulong =           0x0042;
-const LOCALE_SMONTHNAME12: winapi::c_ulong =           0x0043;
-const LOCALE_SMONTHNAME13: winapi::c_ulong =           0x100E;
-const LOCALE_SABBREVMONTHNAME1: winapi::c_ulong =      0x0044;
-const LOCALE_SABBREVMONTHNAME2: winapi::c_ulong =      0x0045;
-const LOCALE_SABBREVMONTHNAME3: winapi::c_ulong =      0x0046;
-const LOCALE_SABBREVMONTHNAME4: winapi::c_ulong =      0x0047;
-const LOCALE_SABBREVMONTHNAME5: winapi::c_ulong =      0x0048;
-const LOCALE_SABBREVMONTHNAME6: winapi::c_ulong =      0x0049;
-const LOCALE_SABBREVMONTHNAME7: winapi::c_ulong =      0x004A;
-const LOCALE_SABBREVMONTHNAME8: winapi::c_ulong =      0x004B;
-const LOCALE_SABBREVMONTHNAME9: winapi::c_ulong =      0x004C;
-const LOCALE_SABBREVMONTHNAME10: winapi::c_ulong =     0x004D;
-const LOCALE_SABBREVMONTHNAME11: winapi::c_ulong =     0x004E;
-const LOCALE_SABBREVMONTHNAME12: winapi::c_ulong =     0x004F;
-const LOCALE_SABBREVMONTHNAME13: winapi::c_ulong =     0x100F;
-const LOCALE_SPOSITIVESIGN: winapi::c_ulong =          0x0050;
-const LOCALE_SNEGATIVESIGN: winapi::c_ulong =          0x0051;
-const LOCALE_IPOSSIGNPOSN: winapi::c_ulong =           0x0052;
-const LOCALE_INEGSIGNPOSN: winapi::c_ulong =           0x0053;
-const LOCALE_IPOSSYMPRECEDES: winapi::c_ulong =        0x0054;
-const LOCALE_IPOSSEPBYSPACE: winapi::c_ulong =         0x0055;
-const LOCALE_INEGSYMPRECEDES: winapi::c_ulong =        0x0056;
-const LOCALE_INEGSEPBYSPACE: winapi::c_ulong =         0x0057;
-const LOCALE_FONTSIGNATURE: winapi::c_ulong =          0x0058;
-const LOCALE_SISO639LANGNAME: winapi::c_ulong =        0x0059;
-const LOCALE_SISO3166CTRYNAME: winapi::c_ulong =       0x005A;
-const LOCALE_IGEOID: winapi::c_ulong =                 0x005B;
-const LOCALE_SNAME: winapi::c_ulong =                  0x005C;
-const LOCALE_SDURATION: winapi::c_ulong =              0x005D;
-const LOCALE_SKEYBOARDSTOINSTALL: winapi::c_ulong =    0x005E;
-const LOCALE_SSHORTESTDAYNAME1: winapi::c_ulong =      0x0060;
-const LOCALE_SSHORTESTDAYNAME2: winapi::c_ulong =      0x0061;
-const LOCALE_SSHORTESTDAYNAME3: winapi::c_ulong =      0x0062;
-const LOCALE_SSHORTESTDAYNAME4: winapi::c_ulong =      0x0063;
-const LOCALE_SSHORTESTDAYNAME5: winapi::c_ulong =      0x0064;
-const LOCALE_SSHORTESTDAYNAME6: winapi::c_ulong =      0x0065;
-const LOCALE_SSHORTESTDAYNAME7: winapi::c_ulong =      0x0066;
-const LOCALE_SISO639LANGNAME2: winapi::c_ulong =       0x0067;
-const LOCALE_SISO3166CTRYNAME2: winapi::c_ulong =      0x0068;
-const LOCALE_SNAN: winapi::c_ulong =                   0x0069;
-const LOCALE_SPOSINFINITY: winapi::c_ulong =           0x006A;
-const LOCALE_SNEGINFINITY: winapi::c_ulong =           0x006B;
-const LOCALE_SSCRIPTS: winapi::c_ulong =               0x006C;
-const LOCALE_SPARENT: winapi::c_ulong =                0x006D;
-const LOCALE_SCONSOLEFALLBACKNAME: winapi::c_ulong =   0x006E;
-const LOCALE_SLANGDISPLAYNAME: winapi::c_ulong =       0x006F;
-const LOCALE_SLOCALIZEDLANGUAGENAME: winapi::c_ulong = 0x006F;
-const LOCALE_IREADINGLAYOUT: winapi::c_ulong =         0x0070;
-const LOCALE_INEUTRAL: winapi::c_ulong =               0x0071;
-const LOCALE_SENGLISHDISPLAYNAME: winapi::c_ulong =    0x0072;
-const LOCALE_SNATIVEDISPLAYNAME: winapi::c_ulong =     0x0073;
-const LOCALE_INEGATIVEPERCENT: winapi::c_ulong =       0x0074;
-const LOCALE_IPOSITIVEPERCENT: winapi::c_ulong =       0x0075;
-const LOCALE_SPERCENT: winapi::c_ulong =               0x0076;
-const LOCALE_SPERMILLE: winapi::c_ulong =              0x0077;
-const LOCALE_SMONTHDAY: winapi::c_ulong =              0x0078;
-const LOCALE_SSHORTTIME: winapi::c_ulong =             0x0079;
-const LOCALE_SOPENTYPELANGUAGETAG: winapi::c_ulong =   0x007A;
-const LOCALE_SSORTLOCALE: winapi::c_ulong =            0x007B;
+#[allow(dead_code)]
+mod consts {
+    use super::winapi::c_ulong;
+    // Locale information types from winnls.h
+    pub const LOCALE_ILANGUAGE: c_ulong =              0x0001;
+    pub const LOCALE_SLANGUAGE: c_ulong =              0x0002;
+    pub const LOCALE_SENGLANGUAGE: c_ulong =           0x1001;
+    pub const LOCALE_SENGLISHLANGUAGENAME: c_ulong =   0x1001;
+    pub const LOCALE_SABBREVLANGNAME: c_ulong =        0x0003;
+    pub const LOCALE_SNATIVELANGNAME: c_ulong =        0x0004;
+    pub const LOCALE_SNATIVELANGUAGENAME: c_ulong =    0x0004;
+    pub const LOCALE_ICOUNTRY: c_ulong =               0x0005;
+    pub const LOCALE_SCOUNTRY: c_ulong =               0x0006;
+    pub const LOCALE_SLOCALIZEDCOUNTRYNAME: c_ulong =  0x0006;
+    pub const LOCALE_SENGCOUNTRY: c_ulong =            0x1002;
+    pub const LOCALE_SENGLISHCOUNTRYNAME: c_ulong =    0x1002;
+    pub const LOCALE_SABBREVCTRYNAME: c_ulong =        0x0007;
+    pub const LOCALE_SNATIVECTRYNAME: c_ulong =        0x0008;
+    pub const LOCALE_SNATIVECOUNTRYNAME: c_ulong =     0x0008;
+    pub const LOCALE_IDEFAULTLANGUAGE: c_ulong =       0x0009;
+    pub const LOCALE_IDEFAULTCOUNTRY: c_ulong =        0x000A;
+    pub const LOCALE_IDEFAULTCODEPAGE: c_ulong =       0x000B;
+    pub const LOCALE_IDEFAULTANSICODEPAGE: c_ulong =   0x1004;
+    pub const LOCALE_IDEFAULTMACCODEPAGE: c_ulong =    0x1011;
+    pub const LOCALE_SLIST: c_ulong =                  0x000C;
+    pub const LOCALE_IMEASURE: c_ulong =               0x000D;
+    pub const LOCALE_SDECIMAL: c_ulong =               0x000E;
+    pub const LOCALE_STHOUSAND: c_ulong =              0x000F;
+    pub const LOCALE_SGROUPING: c_ulong =              0x0010;
+    pub const LOCALE_IDIGITS: c_ulong =                0x0011;
+    pub const LOCALE_ILZERO: c_ulong =                 0x0012;
+    pub const LOCALE_INEGNUMBER: c_ulong =             0x1010;
+    pub const LOCALE_SNATIVEDIGITS: c_ulong =          0x0013;
+    pub const LOCALE_SCURRENCY: c_ulong =              0x0014;
+    pub const LOCALE_SINTLSYMBOL: c_ulong =            0x0015;
+    pub const LOCALE_SMONDECIMALSEP: c_ulong =         0x0016;
+    pub const LOCALE_SMONTHOUSANDSEP: c_ulong =        0x0017;
+    pub const LOCALE_SMONGROUPING: c_ulong =           0x0018;
+    pub const LOCALE_ICURRDIGITS: c_ulong =            0x0019;
+    pub const LOCALE_IINTLCURRDIGITS: c_ulong =        0x001A;
+    pub const LOCALE_ICURRENCY: c_ulong =              0x001B;
+    pub const LOCALE_INEGCURR: c_ulong =               0x001C;
+    pub const LOCALE_SDATE: c_ulong =                  0x001D;
+    pub const LOCALE_STIME: c_ulong =                  0x001E;
+    pub const LOCALE_SSHORTDATE: c_ulong =             0x001F;
+    pub const LOCALE_SLONGDATE: c_ulong =              0x0020;
+    pub const LOCALE_STIMEFORMAT: c_ulong =            0x1003;
+    pub const LOCALE_IDATE: c_ulong =                  0x0021;
+    pub const LOCALE_ILDATE: c_ulong =                 0x0022;
+    pub const LOCALE_ITIME: c_ulong =                  0x0023;
+    pub const LOCALE_ITIMEMARKPOSN: c_ulong =          0x1005;
+    pub const LOCALE_ICENTURY: c_ulong =               0x0024;
+    pub const LOCALE_ITLZERO: c_ulong =                0x0025;
+    pub const LOCALE_IDAYLZERO: c_ulong =              0x0026;
+    pub const LOCALE_IMONLZERO: c_ulong =              0x0027;
+    pub const LOCALE_S1159: c_ulong =                  0x0028;
+    pub const LOCALE_S2359: c_ulong =                  0x0029;
+    pub const LOCALE_ICALENDARTYPE: c_ulong =          0x1009;
+    pub const LOCALE_IOPTIONALCALENDAR: c_ulong =      0x100B;
+    pub const LOCALE_IFIRSTDAYOFWEEK: c_ulong =        0x100C;
+    pub const LOCALE_IFIRSTWEEKOFYEAR: c_ulong =       0x100D;
+    pub const LOCALE_SDAYNAME1: c_ulong =              0x002A;
+    pub const LOCALE_SDAYNAME2: c_ulong =              0x002B;
+    pub const LOCALE_SDAYNAME3: c_ulong =              0x002C;
+    pub const LOCALE_SDAYNAME4: c_ulong =              0x002D;
+    pub const LOCALE_SDAYNAME5: c_ulong =              0x002E;
+    pub const LOCALE_SDAYNAME6: c_ulong =              0x002F;
+    pub const LOCALE_SDAYNAME7: c_ulong =              0x0030;
+    pub const LOCALE_SABBREVDAYNAME1: c_ulong =        0x0031;
+    pub const LOCALE_SABBREVDAYNAME2: c_ulong =        0x0032;
+    pub const LOCALE_SABBREVDAYNAME3: c_ulong =        0x0033;
+    pub const LOCALE_SABBREVDAYNAME4: c_ulong =        0x0034;
+    pub const LOCALE_SABBREVDAYNAME5: c_ulong =        0x0035;
+    pub const LOCALE_SABBREVDAYNAME6: c_ulong =        0x0036;
+    pub const LOCALE_SABBREVDAYNAME7: c_ulong =        0x0037;
+    pub const LOCALE_SMONTHNAME1: c_ulong =            0x0038;
+    pub const LOCALE_SMONTHNAME2: c_ulong =            0x0039;
+    pub const LOCALE_SMONTHNAME3: c_ulong =            0x003A;
+    pub const LOCALE_SMONTHNAME4: c_ulong =            0x003B;
+    pub const LOCALE_SMONTHNAME5: c_ulong =            0x003C;
+    pub const LOCALE_SMONTHNAME6: c_ulong =            0x003D;
+    pub const LOCALE_SMONTHNAME7: c_ulong =            0x003E;
+    pub const LOCALE_SMONTHNAME8: c_ulong =            0x003F;
+    pub const LOCALE_SMONTHNAME9: c_ulong =            0x0040;
+    pub const LOCALE_SMONTHNAME10: c_ulong =           0x0041;
+    pub const LOCALE_SMONTHNAME11: c_ulong =           0x0042;
+    pub const LOCALE_SMONTHNAME12: c_ulong =           0x0043;
+    pub const LOCALE_SMONTHNAME13: c_ulong =           0x100E;
+    pub const LOCALE_SABBREVMONTHNAME1: c_ulong =      0x0044;
+    pub const LOCALE_SABBREVMONTHNAME2: c_ulong =      0x0045;
+    pub const LOCALE_SABBREVMONTHNAME3: c_ulong =      0x0046;
+    pub const LOCALE_SABBREVMONTHNAME4: c_ulong =      0x0047;
+    pub const LOCALE_SABBREVMONTHNAME5: c_ulong =      0x0048;
+    pub const LOCALE_SABBREVMONTHNAME6: c_ulong =      0x0049;
+    pub const LOCALE_SABBREVMONTHNAME7: c_ulong =      0x004A;
+    pub const LOCALE_SABBREVMONTHNAME8: c_ulong =      0x004B;
+    pub const LOCALE_SABBREVMONTHNAME9: c_ulong =      0x004C;
+    pub const LOCALE_SABBREVMONTHNAME10: c_ulong =     0x004D;
+    pub const LOCALE_SABBREVMONTHNAME11: c_ulong =     0x004E;
+    pub const LOCALE_SABBREVMONTHNAME12: c_ulong =     0x004F;
+    pub const LOCALE_SABBREVMONTHNAME13: c_ulong =     0x100F;
+    pub const LOCALE_SPOSITIVESIGN: c_ulong =          0x0050;
+    pub const LOCALE_SNEGATIVESIGN: c_ulong =          0x0051;
+    pub const LOCALE_IPOSSIGNPOSN: c_ulong =           0x0052;
+    pub const LOCALE_INEGSIGNPOSN: c_ulong =           0x0053;
+    pub const LOCALE_IPOSSYMPRECEDES: c_ulong =        0x0054;
+    pub const LOCALE_IPOSSEPBYSPACE: c_ulong =         0x0055;
+    pub const LOCALE_INEGSYMPRECEDES: c_ulong =        0x0056;
+    pub const LOCALE_INEGSEPBYSPACE: c_ulong =         0x0057;
+    pub const LOCALE_FONTSIGNATURE: c_ulong =          0x0058;
+    pub const LOCALE_SISO639LANGNAME: c_ulong =        0x0059;
+    pub const LOCALE_SISO3166CTRYNAME: c_ulong =       0x005A;
+    pub const LOCALE_IGEOID: c_ulong =                 0x005B;
+    pub const LOCALE_SNAME: c_ulong =                  0x005C;
+    pub const LOCALE_SDURATION: c_ulong =              0x005D;
+    pub const LOCALE_SKEYBOARDSTOINSTALL: c_ulong =    0x005E;
+    pub const LOCALE_SSHORTESTDAYNAME1: c_ulong =      0x0060;
+    pub const LOCALE_SSHORTESTDAYNAME2: c_ulong =      0x0061;
+    pub const LOCALE_SSHORTESTDAYNAME3: c_ulong =      0x0062;
+    pub const LOCALE_SSHORTESTDAYNAME4: c_ulong =      0x0063;
+    pub const LOCALE_SSHORTESTDAYNAME5: c_ulong =      0x0064;
+    pub const LOCALE_SSHORTESTDAYNAME6: c_ulong =      0x0065;
+    pub const LOCALE_SSHORTESTDAYNAME7: c_ulong =      0x0066;
+    pub const LOCALE_SISO639LANGNAME2: c_ulong =       0x0067;
+    pub const LOCALE_SISO3166CTRYNAME2: c_ulong =      0x0068;
+    pub const LOCALE_SNAN: c_ulong =                   0x0069;
+    pub const LOCALE_SPOSINFINITY: c_ulong =           0x006A;
+    pub const LOCALE_SNEGINFINITY: c_ulong =           0x006B;
+    pub const LOCALE_SSCRIPTS: c_ulong =               0x006C;
+    pub const LOCALE_SPARENT: c_ulong =                0x006D;
+    pub const LOCALE_SCONSOLEFALLBACKNAME: c_ulong =   0x006E;
+    pub const LOCALE_SLANGDISPLAYNAME: c_ulong =       0x006F;
+    pub const LOCALE_SLOCALIZEDLANGUAGENAME: c_ulong = 0x006F;
+    pub const LOCALE_IREADINGLAYOUT: c_ulong =         0x0070;
+    pub const LOCALE_INEUTRAL: c_ulong =               0x0071;
+    pub const LOCALE_SENGLISHDISPLAYNAME: c_ulong =    0x0072;
+    pub const LOCALE_SNATIVEDISPLAYNAME: c_ulong =     0x0073;
+    pub const LOCALE_INEGATIVEPERCENT: c_ulong =       0x0074;
+    pub const LOCALE_IPOSITIVEPERCENT: c_ulong =       0x0075;
+    pub const LOCALE_SPERCENT: c_ulong =               0x0076;
+    pub const LOCALE_SPERMILLE: c_ulong =              0x0077;
+    pub const LOCALE_SMONTHDAY: c_ulong =              0x0078;
+    pub const LOCALE_SSHORTTIME: c_ulong =             0x0079;
+    pub const LOCALE_SOPENTYPELANGUAGETAG: c_ulong =   0x007A;
+    pub const LOCALE_SSORTLOCALE: c_ulong =            0x007B;
 
-const LOCALE_IDEFAULTEBCDICCODEPAGE: winapi::c_ulong = 0x1012;
-const LOCALE_IPAPERSIZE: winapi::c_ulong =             0x100A;
-const LOCALE_SENGCURRNAME: winapi::c_ulong =           0x1007;
-const LOCALE_SNATIVECURRNAME: winapi::c_ulong =        0x1008;
-const LOCALE_SYEARMONTH: winapi::c_ulong =             0x1006;
-const LOCALE_SSORTNAME: winapi::c_ulong =              0x1013;
-const LOCALE_IDIGITSUBSTITUTION: winapi::c_ulong =     0x1014;
+    pub const LOCALE_IDEFAULTEBCDICCODEPAGE: c_ulong = 0x1012;
+    pub const LOCALE_IPAPERSIZE: c_ulong =             0x100A;
+    pub const LOCALE_SENGCURRNAME: c_ulong =           0x1007;
+    pub const LOCALE_SNATIVECURRNAME: c_ulong =        0x1008;
+    pub const LOCALE_SYEARMONTH: c_ulong =             0x1006;
+    pub const LOCALE_SSORTNAME: c_ulong =              0x1013;
+    pub const LOCALE_IDIGITSUBSTITUTION: c_ulong =     0x1014;
+} // mod consts
+
+use self::consts::*;
 
 fn get_user_default_locale() -> super::Result<LanguageRange<'static>> {
     let mut buf = [0u16; 85];
@@ -183,72 +189,225 @@ fn get_user_default_locale() -> super::Result<LanguageRange<'static>> {
     };
     if len > 0 {
         let mut s = String::from_utf16_lossy(&buf[..(len as usize - 1)]);
-        let mut u_ext = String::new();
-        let mut x_ext = String::new();
-        if_locale_info_differs(LOCALE_SDECIMAL, |s| {
-            x_ext.push_str("-ds");
-            for c in s.chars() {
-                write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+
+        {
+            // First collect parameters that have representation in -u extension as defined in
+            // Unicode TR35§3.6:
+            let mut u_ext = String::new();
+
+            // cf
+            // Negative monetary format, Region and Language/Customize Format/Currency (LOCALE_INEGCURR):
+            // We only distinguish between parenthesized format (-u-cf-account) and using minus sign
+            // (-u-cf-standard).
+            // Note: the formats are numbered in rather random order, so the numbers corresponding to
+            // parenthesized formats are 0, 4, 14 and 15.
+            if_locale_info_differs(LOCALE_INEGCURR, |s| {
+                u_ext.push_str(match s { "0"|"4"|"14"|"15" => "-cf-account", _ => "-cf-standard" });
+            });
+
+            // fw
+            // Start-of-week, Region and Language/Formats and Region and Language/Customize
+            // Formats/Date (LOCALE_IFIRSTDAYOFWEEK):
+            if_locale_info_differs(LOCALE_IFIRSTDAYOFWEEK, |s| {
+                u_ext.push_str(match s { "0" => "-fw-mon", "1" => "-fw-tue", "2" => "-fw-wed", "3" => "-fw-thu", "4" => "-fw-fri", "5" => "-fw-sat", "6" => "-fw-sun", _ => "" });
+            });
+
+            // hc
+            // Time formats, Region and Language/Formats and Region and Language/Customize Formats/Time
+            // (LOCALE_SSHORTTIME + LOCALE_STIMEFORMAT):
+            // We only use the hour-cycle here
+            // NOTE: Only ‘h’ and ‘H’ actually appear.
+            // TODO: Verify the hour-cycles in Windows actually match the Unicode TR35
+            // TODO: Might also detect whether to use leading zeroes.
+            if_locale_info_differs(LOCALE_STIMEFORMAT, |s| {
+                if s.contains('h') {
+                    u_ext.push_str("-hc-h12"); // 1–12
+                } else if s.contains('H') {
+                    u_ext.push_str("-hc-h23"); // 0–23
+                } else if s.contains('K') {
+                    u_ext.push_str("-hc-h11"); // 0–11
+                } else if s.contains('k') {
+                    u_ext.push_str("-hc-h24"); // 1–24
+                }
+            });
+
+            // ms
+            // Measurement system, Region and Language/Customize Format/Numbers:
+            if_locale_info_differs(LOCALE_IMEASURE, |s| {
+                u_ext.push_str(match s { "0" => "-ms-metric", "1" => "-ms-ussystem", _ => "" });
+            });
+
+            // nu
+            // Standard digits, Region and Language/Customize Format/Numbers:
+            // TODO: We should probably take into account the LOCALE_IDIGITSUBSTITUTION and set the
+            // digits if either LOCALE_SNATIVEDIGITS or LOCALE_IDIGITSUBSTITUTION is not default AND
+            // LOCALE_IDIGITSUBSTITUTION is not 1 (0 = contextual, 1 = use latin, 2 = use specified).
+            // I am not sure we will implement the contextual logic too.
+            if_locale_info_differs(LOCALE_SNATIVEDIGITS, |s| {
+                u_ext.push_str(match s.as_ref() {
+                    // basic plane numeric numberingSystems from CLDR
+                    "٠١٢٣٤٥٦٧٨٩" => "-nu-arab",
+                    "۰۱۲۳۴۵۶۷۸۹" => "-nu-arabext",
+                    "᭐᭑᭒᭓᭔᭕᭖᭗᭘᭙" => "-nu-bali",
+                    "০১২৩৪৫৬৭৮৯" => "-nu-beng",
+                    "꩐꩑꩒꩓꩔꩕꩖꩗꩘꩙" => "-nu-cham",
+                    "०१२३४५६७८९" => "-nu-deva",
+                    "０１２３４５６７８９" => "-nu-fullwide",
+                    "૦૧૨૩૪૫૬૭૮૯" => "-nu-gujr",
+                    "੦੧੨੩੪੫੬੭੮੯" => "-nu-guru",
+                    "〇一二三四五六七八九" => "-nu-hanidec",
+                    "꧐꧑꧒꧓꧔꧕꧖꧗꧘꧙" => "-nu-java",
+                    "꤀꤁꤂꤃꤄꤅꤆꤇꤈꤉" => "-nu-kali",
+                    "០១២៣៤៥៦៧៨៩" => "-nu-khmr",
+                    "೦೧೨೩೪೫೬೭೮೯" => "-nu-knda",
+                    "᪀᪁᪂᪃᪄᪅᪆᪇᪈᪉" => "-nu-lana",
+                    "᪐᪑᪒᪓᪔᪕᪖᪗᪘᪙" => "-nu-lanatham",
+                    "໐໑໒໓໔໕໖໗໘໙" => "-nu-laoo",
+                    "0123456789" => "-nu-latn",
+                    "᱀᱁᱂᱃᱄᱅᱆᱇᱈᱉" => "-nu-lepc",
+                    "᥆᥇᥈᥉᥊᥋᥌᥍᥎᥏" => "-nu-limb",
+                    "൦൧൨൩൪൫൬൭൮൯" => "-nu-mlym",
+                    "᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙" => "-nu-mong",
+                    "꯰꯱꯲꯳꯴꯵꯶꯷꯸꯹" => "-nu-mtei",
+                    "၀၁၂၃၄၅၆၇၈၉" => "-nu-mymr",
+                    "႐႑႒႓႔႕႖႗႘႙" => "-nu-mymrshan",
+                    "߀߁߂߃߄߅߆߇߈߉" => "-nu-nkoo",
+                    "᱐᱑᱒᱓᱔᱕᱖᱗᱘᱙" => "-nu-olck",
+                    "୦୧୨୩୪୫୬୭୮୯" => "-nu-orya",
+                    "꣐꣑꣒꣓꣔꣕꣖꣗꣘꣙" => "-nu-saur",
+                    "᮰᮱᮲᮳᮴᮵᮶᮷᮸᮹" => "-nu-sund",
+                    "᧐᧑᧒᧓᧔᧕᧖᧗᧘᧙" => "-nu-talu",
+                    "௦௧௨௩௪௫௬௭௮௯" => "-nu-tamldec",
+                    "౦౧౨౩౪౫౬౭౮౯" => "-nu-telu",
+                    "๐๑๒๓๔๕๖๗๘๙" => "-nu-thai",
+                    "༠༡༢༣༤༥༦༧༨༩" => "-nu-tibt",
+                    "꘠꘡꘢꘣꘤꘥꘦꘧꘨꘩" => "-nu-vaii",
+                    // I don't think Windows can configure anything else, but just in case
+                    _ => "",
+                })
+            });
+
+            // Append the extensions, if any
+            if !u_ext.is_empty() {
+                s.push_str("-u");
+                s.push_str(&*u_ext);
             }
-        });
-        if_locale_info_differs(LOCALE_STHOUSAND, |s| {
-            x_ext.push_str("-gs");
-            for c in s.chars() {
-                write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+        }
+        {
+            // Then collect other parameters that we want to represent using custom -x extension.
+            let mut x_ext = String::new();
+
+            // df
+            // Date formats, Region and Language/Formats and Region and Language/Customize
+            // Formats/Date (LOCALE_SSHORTDATE + LOCALE_SLONGDATE):
+            // The full format is too long and complex for the tag format, so we only interpret ISO
+            // format. TODO: might also detect swapped order and perhaps abbrev name vs. number for
+            // short format.
+            if_locale_info_differs(LOCALE_SSHORTDATE, |s| {
+                if s == "yyyy-MM-dd" {
+                    x_ext.push_str("-df-iso")
+                }
+            });
+
+            // dm
+            // Monetary decimal separator, Region and Language/Customize Format/Currency:
+            if_locale_info_differs(LOCALE_SMONDECIMALSEP, |s| {
+                x_ext.push_str("-dm");
+                for c in s.chars() {
+                    write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+                }
+            });
+
+            // ds
+            // Decimal separator, Region and Language/Customize Format/Numbers:
+            if_locale_info_differs(LOCALE_SDECIMAL, |s| {
+                x_ext.push_str("-ds");
+                for c in s.chars() {
+                    write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+                }
+            });
+
+            // gm
+            // Monetary group separator, Region and Language/Customize Format/Currency:
+            if_locale_info_differs(LOCALE_SMONTHOUSANDSEP, |s| {
+                x_ext.push_str("-gm");
+                for c in s.chars() {
+                    write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+                }
+            });
+
+            // gs
+            // Group separator, Region and Language/Customize Format/Numbers:
+            if_locale_info_differs(LOCALE_STHOUSAND, |s| {
+                x_ext.push_str("-gs");
+                for c in s.chars() {
+                    write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+                }
+            });
+
+            // ls
+            // List separator, Region and Language/Customize Format/Numbers:
+            if_locale_info_differs(LOCALE_SLIST, |s| {
+                x_ext.push_str("-ls");
+                for c in s.chars() {
+                    write!(&mut x_ext, "-{:04x}", c as u32).unwrap(); // shouldn't fail unless OOM
+                }
+            });
+
+            // Append the extensions, if any
+            if !x_ext.is_empty() {
+                s.push_str("-x");
+                s.push_str(&*x_ext);
             }
-        });
-        if_locale_info_differs(LOCALE_SNATIVEDIGITS, |s| {
-            u_ext.push_str(match s.as_ref() {
-                // basic plane numeric numberingSystems from CLDR
-                "٠١٢٣٤٥٦٧٨٩" => "-nu-arab",
-                "۰۱۲۳۴۵۶۷۸۹" => "-nu-arabext",
-                "᭐᭑᭒᭓᭔᭕᭖᭗᭘᭙" => "-nu-bali",
-                "০১২৩৪৫৬৭৮৯" => "-nu-beng",
-                "꩐꩑꩒꩓꩔꩕꩖꩗꩘꩙" => "-nu-cham",
-                "०१२३४५६७८९" => "-nu-deva",
-                "０１２３４５６７８９" => "-nu-fullwide",
-                "૦૧૨૩૪૫૬૭૮૯" => "-nu-gujr",
-                "੦੧੨੩੪੫੬੭੮੯" => "-nu-guru",
-                "〇一二三四五六七八九" => "-nu-hanidec",
-                "꧐꧑꧒꧓꧔꧕꧖꧗꧘꧙" => "-nu-java",
-                "꤀꤁꤂꤃꤄꤅꤆꤇꤈꤉" => "-nu-kali",
-                "០១២៣៤៥៦៧៨៩" => "-nu-khmr",
-                "೦೧೨೩೪೫೬೭೮೯" => "-nu-knda",
-                "᪀᪁᪂᪃᪄᪅᪆᪇᪈᪉" => "-nu-lana",
-                "᪐᪑᪒᪓᪔᪕᪖᪗᪘᪙" => "-nu-lanatham",
-                "໐໑໒໓໔໕໖໗໘໙" => "-nu-laoo",
-                "0123456789" => "-nu-latn",
-                "᱀᱁᱂᱃᱄᱅᱆᱇᱈᱉" => "-nu-lepc",
-                "᥆᥇᥈᥉᥊᥋᥌᥍᥎᥏" => "-nu-limb",
-                "൦൧൨൩൪൫൬൭൮൯" => "-nu-mlym",
-                "᠐᠑᠒᠓᠔᠕᠖᠗᠘᠙" => "-nu-mong",
-                "꯰꯱꯲꯳꯴꯵꯶꯷꯸꯹" => "-nu-mtei",
-                "၀၁၂၃၄၅၆၇၈၉" => "-nu-mymr",
-                "႐႑႒႓႔႕႖႗႘႙" => "-nu-mymrshan",
-                "߀߁߂߃߄߅߆߇߈߉" => "-nu-nkoo",
-                "᱐᱑᱒᱓᱔᱕᱖᱗᱘᱙" => "-nu-olck",
-                "୦୧୨୩୪୫୬୭୮୯" => "-nu-orya",
-                "꣐꣑꣒꣓꣔꣕꣖꣗꣘꣙" => "-nu-saur",
-                "᮰᮱᮲᮳᮴᮵᮶᮷᮸᮹" => "-nu-sund",
-                "᧐᧑᧒᧓᧔᧕᧖᧗᧘᧙" => "-nu-talu",
-                "௦௧௨௩௪௫௬௭௮௯" => "-nu-tamldec",
-                "౦౧౨౩౪౫౬౭౮౯" => "-nu-telu",
-                "๐๑๒๓๔๕๖๗๘๙" => "-nu-thai",
-                "༠༡༢༣༤༥༦༧༨༩" => "-nu-tibt",
-                "꘠꘡꘢꘣꘤꘥꘦꘧꘨꘩" => "-nu-vaii",
-                // I don't think Windows can configure anything else, but just in case
-                _ => "",
-            })
-        });
-        // TODO: Other items configurable in Country & Language control panel.
-        if !u_ext.is_empty() {
-            s.push_str("-u");
-            s.push_str(&*u_ext);
         }
-        if !x_ext.is_empty() {
-            s.push_str("-x");
-            s.push_str(&*x_ext);
-        }
+
+        // TODO: Below are the settings we don't handle, but might want to.
+        // ** Region and Language/Location:
+        //  - TODO: Location - LOCALE_IGEOID does not seem to indicate it; not sure what does.
+        // ** Region and Language/Customize Format/Numbers:
+        //  - TODO: Grouping — LOCALE_SGROUPING — not sure how much I really want to deal with
+        //    this.
+        //  - TODO: Negative sign — LOCALE_SNEGATIVESIGN — not sure this makes sense. CLDR has
+        //    U+002D HYPHEN-MINUS almost everywhere with some U+2212 MINUS SIGN thrown in the mix
+        //    rather randomly, one clearly nonsensical U+2013 EN DASH and handful of RTL/LTR marks
+        //    that we should use according to script (or not at all; sure digits and +/- have sane
+        //    RTL flags).
+        //  - NOTE: Positive sign does not seem to be configurable and for en-GB even returns
+        //    somewhat absurd value of “”.
+        //  - TODO: Negative number format — Unicode TR35 only has this for currency (separate
+        //    setting) and CLDR does not have any exceptions from the default of prefix-with-minus
+        //    for decimal formats (only for currency formats).
+        //  - TODO: Leading zeroes — LOCALE_ILZERO — whether to use .7 or 0.7.
+        // ** Region and Language/Customize Format/Currency:
+        //  - TODO: Positive monetary format — LOCALE_ICURRENCY: Currency symbol can precede or
+        //    succeed the value and can be separated by space or not, but we need to design
+        //    representation for it in the -x extension space.
+        //  - TODO: Negative monetary format — LOCALE_INEGCURR: We only handle distinction between
+        //    parenthesized and regular with minus sign, so possibly design representation for the
+        //    other options too.
+        //  - TODO: Monetary grouping — LOCALE_SGROUPING — like grouping above, not sure how much
+        //    I really want to deal with this.
+        // ** Region and Language/Customize Format/Time:
+        //  - TODO: Possibly handle other kinds of formats than just distinguishing 12 and 23 hour
+        //    formats we do above.
+        //  - TODO: Custom AM and PM flags.
+        // ** Region and Language/Customize Format/Date:
+        //  - TODO: Possibly handle other kinds of formats than just distinguishing the ISO-8601
+        //    one we do above.
+        //  - Note: Windows don't seem to support any other calendar than Gregorian; makes it
+        //    easier for us.
+
+        // NOTE: Below are the settings we don't handle and I don't think we should.
+        // ** Region and Language/Customize Format/Numbers:
+        //  - Number of digits after decimal — not used! For general numbers it indicates accuracy,
+        //    so it must be application's choice and for monetary we always have explicit currency
+        //    and use appropriate value for that.
+        // ** Region and Language/Customize Format/Currency:
+        //  - Currency symbol — since there is no way to set the actual currency, just the symbol,
+        //    we can't use it as our monetary formatting is based on explicit currency.
+        //  - Monetary decimal digits — we always use the value for specified currency, not the
+        //    local value.
+
         return LanguageRange::new(&*s).map(|x| x.into_static());
     }
     // TODO: Fall back to GetUserDefaultLCID and/or GetLocaleInfoW

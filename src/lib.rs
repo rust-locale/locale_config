@@ -91,6 +91,51 @@ use std::sync::Mutex;
 ///  * `country` is written in uppercase and
 ///  * all other subtags are written in lowercase.
 ///
+/// When detecting system configuration, additional options that may be generated under the
+/// [`-u-` extension][u_ext] currently are:
+///
+/// * `cf` — Currency format (`account` for parenthesized negative values, `standard` for minus
+///   sign).
+/// * `fw` — First day of week (`mon` to `sun`).
+/// * `hc` — Hour cycle (`h12` for 1–12, `h23` for 0–23).
+/// * `ms` — Measurement system (`metric` or `ussystem`).
+/// * `nu` — Numbering system—only decimal systems are currently used.
+/// * `va` — Variant when locale is specified in Unix format and the tag after `@` does not
+///   correspond to any variant defined in [Language subtag registry].
+///
+/// And under the `-x-` extension, following options are defined:
+///
+/// * `df` — Date format:
+///
+///     * `iso`: Short date should be in ISO format of `yyyy-MM-dd`.
+///
+///     For example `-df-iso`.
+///
+/// * `dm` — Decimal separator for monetary:
+///
+///     Followed by one or more Unicode codepoints in hexadecimal. For example `-dm-002d` means to
+///     use comma.
+///
+/// * `ds` — Decimal separator for numbers:
+///
+///     Followed by one or more Unicode codepoints in hexadecimal. For example `-ds-002d` means to
+///     use comma.
+///
+/// * `gm` — Group (thousand) separator for monetary:
+///
+///     Followed by one or more Unicode codepoints in hexadecimal. For example `-dm-00a0` means to
+///     use non-breaking space.
+///
+/// * `gs` — Group (thousand) separator for numbers:
+///
+///     Followed by one or more Unicode codepoints in hexadecimal. For example `-ds-00a0` means to
+///     use non-breaking space.
+///
+/// * `ls` — List separator:
+///
+///     Followed by one or more Unicode codepoints in hexadecimal. For example, `-ds-003b` means to
+///     use a semicolon.
+///
 /// [RFC5646]: https://www.rfc-editor.org/rfc/rfc5646.txt
 /// [RFC4647]: https://www.rfc-editor.org/rfc/rfc4647.txt
 /// [ISO639]: https://en.wikipedia.org/wiki/ISO_639
@@ -98,6 +143,7 @@ use std::sync::Mutex;
 /// [ISO3166]: https://en.wikipedia.org/wiki/ISO_3166
 /// [UN M.49]: https://en.wikipedia.org/wiki/UN_M.49
 /// [u_ext]: http://www.unicode.org/reports/tr35/#u_Extension
+/// [Language subtag registry]: https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
 #[derive(Clone,Debug,Eq,Hash,PartialEq)]
 pub struct LanguageRange<'a> {
     language: Cow<'a, str>
@@ -310,7 +356,8 @@ impl<'a> LanguageRange<'a> {
                 "valencia" => variant = "valencia",
             // Currencies:
                 // @euro - NOTE: We follow suite of Java and Openoffice and ignore it, because it
-                // is default for all locales where it sometimes appears now anyway.
+                // is default for all locales where it sometimes appears now, and because we use
+                // explicit currency in monetary formatting anyway.
                 "euro" => {},
             // Collation:
                 // gez@abegede - NOTE: This is collation, but CLDR does not have any code for it,
