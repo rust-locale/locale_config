@@ -47,7 +47,7 @@ run_test_suite() {
     fi
 
     # sanity check the file type
-    # TODO: non-deterministic, unfortunately: file target/$TARGET/debug/hello
+    file target/$TARGET/debug/liblocale_config.rlib
 }
 
 main() {

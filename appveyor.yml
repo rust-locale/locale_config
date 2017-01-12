@@ -34,7 +34,6 @@ build_script:
 # NOTE: rust-everywhere didn't have the cmd: prefix, but the appveyor
 # configurator generates it, so I set it too.
 test_script:
-  - cmd: cd locale_core & cargo test
   - cmd: cargo test
   - cmd: cargo run --example show-user-locale
 
