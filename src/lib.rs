@@ -152,25 +152,25 @@ pub struct LanguageRange<'a> {
 lazy_static! {
     static ref REGULAR_LANGUAGE_RANGE_REGEX: Regex = Regex::new(r"(?x) ^
         (?P<language> (?:
-            [:alpha:]{2,3} (?: - [:alpha:]{3} ){0,3}
+            [[:alpha:]]{2,3} (?: - [[:alpha:]]{3} ){0,3}
             | \* ))
-        (?P<script> - (?: [:alpha:]{4} | \* ))?
-        (?P<region> - (?: [:alpha:]{2} | [:digit:]{3} | \* ))?
-        (?P<rest> (?: - (?: [:alnum:]{1,8} | \* ))*)
+        (?P<script> - (?: [[:alpha:]]{4} | \* ))?
+        (?P<region> - (?: [[:alpha:]]{2} | [[:digit:]]{3} | \* ))?
+        (?P<rest> (?: - (?: [[:alnum:]]{1,8} | \* ))*)
     $ ").unwrap();
     static ref LANGUAGE_RANGE_REGEX: Regex = Regex::new(r"(?x) ^
-        (?: [:alpha:]{1,8} | \* )
-        (?: - (?: [:alnum:]{1,8} | \* ))*
+        (?: [[:alpha:]]{1,8} | \* )
+        (?: - (?: [[:alnum:]]{1,8} | \* ))*
     $ ").unwrap();
     static ref UNIX_INVARIANT_REGEX: Regex = Regex::new(r"(?ix) ^
         (?: c | posix )
         (?: \. (?: [0-9a-zA-Z-]{1,20} ))?
     $ ").unwrap();
     static ref UNIX_TAG_REGEX: Regex = Regex::new(r"(?ix) ^
-        (?P<language> [:alpha:]{2,3} )
-        (?: _  (?P<region> [:alpha:]{2} | [:digit:]{3} ))?
+        (?P<language> [[:alpha:]]{2,3} )
+        (?: _  (?P<region> [[:alpha:]]{2} | [[:digit:]]{3} ))?
         (?: \. (?P<encoding> [0-9a-zA-Z-]{1,20} ))?
-        (?: @  (?P<variant> [:alnum:]{1,20} ))?
+        (?: @  (?P<variant> [[:alnum:]]{1,20} ))?
     $ ").unwrap();
 }
 
@@ -241,10 +241,10 @@ impl<'a> LanguageRange<'a> {
                 language: Cow::Borrowed(lt),
             });
         } else if let Some(caps) = REGULAR_LANGUAGE_RANGE_REGEX.captures(lt) {
-            let language = canon_lower(caps.name("language"));
-            let script = canon_script(caps.name("script"));
-            let region = canon_upper(caps.name("region"));
-            let rest = canon_lower(caps.name("rest"));
+            let language = canon_lower(caps.name("language").map(|m| m.as_str()));
+            let script = canon_script(caps.name("script").map(|m| m.as_str()));
+            let region = canon_upper(caps.name("region").map(|m| m.as_str()));
+            let rest = canon_lower(caps.name("rest").map(|m| m.as_str()));
             if is_owned(&language) ||
                 is_owned(&script) ||
                 is_owned(&region) ||
@@ -307,9 +307,9 @@ impl<'a> LanguageRange<'a> {
     /// kind of tags from other sources than system configuration.
     pub fn from_unix(s: &str) -> Result<LanguageRange<'static>> {
         if let Some(caps) = UNIX_TAG_REGEX.captures(s) {
-            let src_variant = caps.name("variant").unwrap_or("").to_ascii_lowercase();
-            let mut res = caps.name("language").unwrap().to_ascii_lowercase();
-            let region = caps.name("region").unwrap_or("");
+            let src_variant = caps.name("variant").map(|m| m.as_str()).unwrap_or("").to_ascii_lowercase();
+            let mut res = caps.name("language").map(|m| m.as_str()).unwrap().to_ascii_lowercase();
+            let region = caps.name("region").map(|m| m.as_str()).unwrap_or("");
             let mut script = "";
             let mut variant = "";
             let mut uvariant = "";
@@ -445,8 +445,8 @@ pub struct Locale {
 
 lazy_static! {
     static ref LOCALE_ELEMENT_REGEX: Regex = Regex::new(r"(?ix) ^
-        (?: (?P<category> [:alpha:]{1,20} ) = )?
-        (?P<tag> (?: [:alnum:] | - | \* )+ )
+        (?: (?P<category> [[:alpha:]]{1,20} ) = )?
+        (?P<tag> (?: [[:alnum:]] | - | \* )+ )
     $ ").unwrap();
 }
 
@@ -500,8 +500,8 @@ impl Locale {
         for t in i {
             if let Some(caps) = LOCALE_ELEMENT_REGEX.captures(t) {
                 let tag = try!(LanguageRange::new(
-                        try!(caps.name("tag").ok_or(Error::NotWellFormed))));
-                match caps.name("category") {
+                        try!(caps.name("tag").map(|m| m.as_str()).ok_or(Error::NotWellFormed))));
+                match caps.name("category").map(|m| m.as_str()) {
                     Some(cat) => res.add_category(cat.to_ascii_lowercase().as_ref(), &tag),
                     None => res.add(&tag),
                 }
