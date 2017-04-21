@@ -94,6 +94,10 @@ See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](
 
 ## Changelog
 
+### 0.2.2
+
+* Update dependencies: regex 0.2.
+
 ### 0.2.1
 
 * Interpret some overrides that can be set on Windows in Region and Language
