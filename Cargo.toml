@@ -14,6 +14,11 @@ documentation = "https://docs.rs/locale_config/"
 repository = "https://github.com/rust-locale/locale_config/"
 readme = "README.md"
 keywords = ["i18n"]
+categories = ["os"]
+
+[badges]
+travis-ci = { repository = "rust-locale/locale_config" }
+appveyor = { repository = "rust-locale/locale_config" }
 
 [dependencies]
 lazy_static = "0.2"
