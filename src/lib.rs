@@ -703,17 +703,13 @@ mod cgi;
 mod unix;
 
 // NOTE: Functions used exist from Vista on only
-#[cfg(windows)]
+#[cfg(target_family = "windows")]
 mod win32;
-#[cfg(not(windows))]
-mod win32 {
-    pub fn system_locale() -> Option<super::Locale> { None }
-}
 
 static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
     cgi::system_locale,
     unix::system_locale,
-    win32::system_locale,
+    #[cfg(target_family = "windows")] win32::system_locale,
 ];
 
 fn system_locale() -> Locale {
