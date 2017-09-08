@@ -94,6 +94,10 @@ See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](
 
 ## Changelog
 
+### 0.2.3
+
+* Support getting locale in emscripten targets in browser.
+
 ### 0.2.2
 
 * Update dependencies: regex 0.2.

@@ -706,10 +706,15 @@ mod unix;
 #[cfg(target_family = "windows")]
 mod win32;
 
+// Emscripten support
+#[cfg(target_os = "emscripten")]
+mod emscripten;
+
 static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
     cgi::system_locale,
     unix::system_locale,
     #[cfg(target_family = "windows")] win32::system_locale,
+    #[cfg(target_os = "emscripten")] emscripten::system_locale,
 ];
 
 fn system_locale() -> Locale {
