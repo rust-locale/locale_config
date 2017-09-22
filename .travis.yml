@@ -48,10 +48,8 @@ matrix:
     # Emscripten
     - env: TARGET=asmjs-unknown-emscripten
       rust: nightly
-      group: deprecated-2017Q2
     - env: TARGET=wasm32-unknown-emscripten
       rust: nightly
-      group: deprecated-2017Q2
 
     # Testing other channels
     - env: TARGET=x86_64-unknown-linux-gnu
