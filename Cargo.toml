@@ -22,8 +22,8 @@ travis-ci = { repository = "rust-locale/locale_config" }
 appveyor = { repository = "rust-locale/locale_config" }
 
 [dependencies]
-lazy_static = "0.2"
-regex = "0.2"
+lazy_static = "1"
+regex = "1"
 
 [target.'cfg(windows)'.dependencies]
 winapi = "0.2.8"
