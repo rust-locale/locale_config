@@ -15,6 +15,7 @@ repository = "https://github.com/rust-locale/locale_config/"
 readme = "README.md"
 keywords = ["i18n"]
 categories = ["os"]
+exclude = ["/ci/*", "/.travis.yml", "/appveyor.yml"]
 
 [badges]
 travis-ci = { repository = "rust-locale/locale_config" }
