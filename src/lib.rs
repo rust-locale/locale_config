@@ -18,7 +18,6 @@ extern crate lazy_static;
 extern crate regex;
 
 use regex::Regex;
-use std::ascii::AsciiExt;
 use std::borrow::{Borrow,Cow};
 use std::cell::RefCell;
 use std::convert::AsRef;
