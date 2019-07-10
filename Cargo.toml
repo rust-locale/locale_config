@@ -26,8 +26,7 @@ lazy_static = "1"
 regex = "1"
 
 [target.'cfg(windows)'.dependencies]
-winapi = "0.2.8"
-kernel32-sys = "0.2.2"
+winapi = { version = "0.3", features = ["winnls"] }
 
 [package.metadata.release]
 upload-doc = true
