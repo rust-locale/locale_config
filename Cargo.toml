@@ -1,6 +1,6 @@
 [package]
 name = "locale_config"
-version = "0.2.3-pre"
+version = "0.2.3"
 description = """
 Maintains locale preferences for process and thread and initialises them by
 inspecting the system for user preference.
@@ -17,6 +17,9 @@ keywords = ["i18n"]
 categories = ["os"]
 exclude = ["/ci/*", "/.travis.yml", "/appveyor.yml"]
 
+[package.metadata.release]
+upload-doc = true
+
 [badges]
 travis-ci = { repository = "rust-locale/locale_config" }
 appveyor = { repository = "rust-locale/locale_config" }
@@ -27,6 +30,3 @@ regex = "1"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winnls"] }
-
-[package.metadata.release]
-upload-doc = true
