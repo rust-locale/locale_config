@@ -96,7 +96,11 @@ See full documentation on [![Docs.rs](https://docs.rs/locale_config/badge.svg)](
 
 ### 0.2.3
 
-* Support getting locale in emscripten targets in browser.
+* Try support getting locale in emscripten targets in browser. Unfortunately
+  the emscripten targets seem to have broken in cross meanwhile, so they are not
+  being tested.
+* Update to winapi 0.3.
+* Update ro regex 1.0.
 
 ### 0.2.2
 
