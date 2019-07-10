@@ -45,11 +45,12 @@ matrix:
     - env: TARGET=powerpc64le-unknown-linux-gnu
     - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
 
-    # Emscripten
-    - env: TARGET=asmjs-unknown-emscripten
-      rust: nightly
-    - env: TARGET=wasm32-unknown-emscripten
-      rust: nightly
+    # Asmjs & Wasm
+    # TODO: Emscripten seems to be broken in cross
+    # - env: TARGET=asmjs-unknown-emscripten
+    # - env: TARGET=wasm32-unknown-emscripten
+    # TODO: wasm-unknown-unknown not yet supported in cross
+    # - env: TARGET=wasm32-unknown-unknown
 
     # Testing other channels
     - env: TARGET=x86_64-unknown-linux-gnu
