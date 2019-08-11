@@ -17,6 +17,10 @@ extern crate lazy_static;
 
 extern crate regex;
 
+#[cfg(target_os = "macos")]
+#[macro_use]
+extern crate objc;
+
 use regex::Regex;
 use std::borrow::{Borrow,Cow};
 use std::cell::RefCell;
@@ -709,11 +713,16 @@ mod win32;
 #[cfg(target_os = "emscripten")]
 mod emscripten;
 
+// macOS support
+#[cfg(target_os = "macos")]
+mod macos;
+
 static INITIALISERS: &'static [fn() -> Option<Locale>] = &[
     cgi::system_locale,
     unix::system_locale,
     #[cfg(target_family = "windows")] win32::system_locale,
     #[cfg(target_os = "emscripten")] emscripten::system_locale,
+	#[cfg(target_os = "macos")] macos::system_locale,
 ];
 
 fn system_locale() -> Locale {
