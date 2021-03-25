@@ -26,7 +26,7 @@ appveyor = { repository = "rust-locale/locale_config" }
 
 [dependencies]
 lazy_static = "1"
-regex = "1"
+regex = { version = "1", default-features = false, features = [ "std", "unicode" ] }
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["winnls"] }
