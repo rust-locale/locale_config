@@ -498,12 +498,12 @@ impl Locale {
     pub fn new(s: &str) -> Result<Locale> {
         let mut i = s.split(',');
         let mut res = Locale::from(
-            try!(LanguageRange::new(
-                    i.next().unwrap()))); // NOTE: split "" is (""), not ()
+            LanguageRange::new(
+                    i.next().unwrap())?); // NOTE: split "" is (""), not ()
         for t in i {
             if let Some(caps) = LOCALE_ELEMENT_REGEX.captures(t) {
-                let tag = try!(LanguageRange::new(
-                        try!(caps.name("tag").map(|m| m.as_str()).ok_or(Error::NotWellFormed))));
+                let tag = LanguageRange::new(
+                        caps.name("tag").map(|m| m.as_str()).ok_or(Error::NotWellFormed)?)?;
                 match caps.name("category").map(|m| m.as_str()) {
                     Some(cat) => res.add_category(cat.to_ascii_lowercase().as_ref(), &tag),
                     None => res.add(&tag),
