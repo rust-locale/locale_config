@@ -13,5 +13,5 @@ pub fn system_locale() -> Option<Locale> {
 		let locale_identifier: *const NSString = msg_send![current_locale, localeIdentifier];
 		locale_identifier.as_ref()
 	};
-	Some(Locale::from(LanguageRange::from_unix(locale_identifier?.as_str())?))
+	Some(Locale::from(LanguageRange::from_unix(locale_identifier?.as_str()).ok()?))
 }
